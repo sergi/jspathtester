@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="node_modules/jsoneditor/jsoneditor-min.css">
+<script type="text/javascript" src="node_modules/jsoneditor/jsoneditor-min.js"></script>
+<script type="text/javascript" src="node_modules/JSONPath/lib/jsonpath.js"></script>
+<style type="text/css" media="screen">
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #ccc;
+  overflow: hidden;
+}
+
+#editor, #jsoneditor {
+  position: relative;
+  background-color: #fff;
+  width: 40%;
+  height: 80%;
+  margin-left: 5%;
+  margin-top: 2%;
+  float: left;
+}
+
+#editor {
+  border: 1px solid #97B0F8;
+}
+
+#expression {
+  margin-top: 50px;
+  clear: both;
+  width: 83%;
+  height: 40px;
+  font-size: 18px;
+  padding: 3px;
+}
+
+#send {
+  width: 10%;
+  font-size: 18px;
+  padding: 4px;
+  height: 49px;
+}
+
+#input_container {
+  width: 100%;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<pre id="editor"></pre>
+<div id="jsoneditor"></div>
+
+<div id="input_container">
+<input id="expression" type="text" value="$.store.book[*].author"/>
+<button id="send">Filter</button>
+</div>
+
+<script type="text/javascript" src="lib/ace/ace.js" charset="utf-8"></script>
+<script type="text/javascript" >
+// create the editor
+var container = document.getElementById("jsoneditor");
+var editor = new jsoneditor.JSONEditor(container);
+
+// set json
+var json = { "store": {
+  "book": [
+    { "category": "reference",
+      "author": "Nigel Rees",
+      "title": "Sayings of the Century",
+      "price": 8.95
+  },
+  { "category": "fiction",
+    "author": "Evelyn Waugh",
+    "title": "Sword of Honour",
+    "price": 12.99
+  },
+  { "category": "fiction",
+    "author": "Herman Melville",
+    "title": "Moby Dick",
+    "isbn": "0-553-21311-3",
+    "price": 8.99
+  },
+  { "category": "fiction",
+    "author": "J. R. R. Tolkien",
+    "title": "The Lord of the Rings",
+    "isbn": "0-395-19395-8",
+    "price": 22.99
+  }
+  ],
+  "bicycle": {
+    "color": "red",
+    "price": 19.95
+  }
+}
+};
+
+// get json
+//var json = editor.get();
+var aceEditor = ace.edit("editor");
+aceEditor.setTheme("ace/theme/jsoneditor");
+aceEditor.getSession().setMode("ace/mode/json");
+aceEditor.setValue(JSON.stringify(json, null, 2));
+aceEditor.clearSelection()
+
+var button = document.getElementById("send");
+var input = document.getElementById("expression");
+button.addEventListener("click", function(e) {
+  editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
+});
+
+input.addEventListener("keydown", function(e) {
+  if (e.keyCode == 13)
+    editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
+});
+
+editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
+input.focus()
+
+</script>
+</body>
+</html>
