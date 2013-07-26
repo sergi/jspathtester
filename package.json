@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "JSONPath": "git://github.com/sergi/JSONPath.git#1238d9229d2e9c3f76a4d51ee7d75d28eab61607",
-    "jsoneditor": "~2.2.1"
   },
   "devDependencies": {},
   "scripts": {

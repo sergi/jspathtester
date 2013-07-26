@@ -2,8 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="node_modules/jsoneditor/jsoneditor-min.css">
-<script type="text/javascript" src="node_modules/jsoneditor/jsoneditor-min.js"></script>
 <script type="text/javascript" src="node_modules/JSONPath/lib/jsonpath.js"></script>
 <style type="text/css" media="screen">
 html, body {
@@ -15,25 +13,42 @@ html, body {
 body {
   background-color: #ccc;
   overflow: hidden;
+  font: 10pt/1.5em Helvetica,"Helvetica neue", Arial, sans-serif;
 }
 
-#editor, #jsoneditor {
+header,section,article,aside,footer{
+  display: block;
+}
+
+header {
+  height: 10%;
+}
+
+h1 {
+  font: 32pt Helvetica,"Helvetica neue", Arial, sans-serif;
+  text-align: center;
+  color: #333;
+  text-shadow: 1px 1px 2px #999;
+}
+
+#mainpanel {
+  height: 80%;
+  clear: both;
+}
+
+#mainpanel pre {
+  border: 1px solid #97B0F8;
   position: relative;
   background-color: #fff;
-  width: 40%;
-  height: 80%;
+  width: 42%;
+  height:auto;
+  min-height: 100%;
   margin-left: 5%;
-  margin-top: 2%;
   float: left;
-}
-
-#editor {
-  border: 1px solid #97B0F8;
+  font-size: 14px;
 }
 
 #expression {
-  margin-top: 50px;
-  clear: both;
   width: 83%;
   height: 40px;
   font-size: 18px;
@@ -43,32 +58,35 @@ body {
 #send {
   width: 10%;
   font-size: 18px;
-  padding: 4px;
+  padding: 3px;
   height: 49px;
 }
 
-#input_container {
+#input_panel {
+  height: 10%
+  position: relative;
+  bottom: 10px;
+  clear: both;
   width: 100%;
   text-align: center;
 }
 </style>
 </head>
 <body>
-<pre id="editor"></pre>
-<div id="jsoneditor"></div>
-
-<div id="input_container">
-<input id="expression" type="text" value="$.store.book[*].author"/>
-<button id="send">Filter</button>
+<header>
+  <h1>JSONPath expression tester</h1>
+</header>
+<div id="input_panel">
+  <input id="expression" type="text" value="$.store.book[*].author"/>
+  <button id="send">Filter</button>
+</div>
+<div id="mainpanel">
+  <pre id="editor"></pre>
+  <pre id="result"></pre>
 </div>
 
 <script type="text/javascript" src="lib/ace/ace.js" charset="utf-8"></script>
 <script type="text/javascript" >
-// create the editor
-var container = document.getElementById("jsoneditor");
-var editor = new jsoneditor.JSONEditor(container);
-
-// set json
 var json = { "store": {
   "book": [
     { "category": "reference",
@@ -101,26 +119,35 @@ var json = { "store": {
 }
 };
 
-// get json
-//var json = editor.get();
 var aceEditor = ace.edit("editor");
-aceEditor.setTheme("ace/theme/jsoneditor");
+aceEditor.setTheme("ace/theme/eclipse");
 aceEditor.getSession().setMode("ace/mode/json");
 aceEditor.setValue(JSON.stringify(json, null, 2));
 aceEditor.clearSelection()
 
+var resultEditor = ace.edit("result");
+resultEditor.setTheme("ace/theme/eclipse");
+resultEditor.getSession().setMode("ace/mode/json");
+resultEditor.setReadOnly(true);
+resultEditor.clearSelection()
+
 var button = document.getElementById("send");
 var input = document.getElementById("expression");
-button.addEventListener("click", function(e) {
-  editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
-});
-
+button.addEventListener("click", filterPath);
 input.addEventListener("keydown", function(e) {
-  if (e.keyCode == 13)
-    editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
+  if (e.keyCode == 13) filterPath();
 });
 
-editor.set(jsonPath.eval(JSON.parse(aceEditor.getValue()), input.value));
+function filterPath() {
+  resultEditor.setValue(
+    JSON.stringify(
+      jsonPath.eval(
+        JSON.parse(
+          aceEditor.getValue()), input.value), null, 2));
+  resultEditor.clearSelection()
+}
+
+filterPath()
 input.focus()
 
 </script>
