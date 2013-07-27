@@ -16,13 +16,7 @@ body {
   font: 10pt/1.5em Helvetica,"Helvetica neue", Arial, sans-serif;
 }
 
-header,section,article,aside,footer{
-  display: block;
-}
-
-header {
-  height: 10%;
-}
+header{ display: block; height: 80px;}
 
 h1 {
   font: 32pt Helvetica,"Helvetica neue", Arial, sans-serif;
@@ -32,20 +26,24 @@ h1 {
 }
 
 #mainpanel {
-  height: 80%;
-  clear: both;
+  display: block;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: -80px 0 -120px 0;
+  padding: 80px 0 120px;
+  overflow: hidden;
 }
 
 #mainpanel pre {
   border: 1px solid #97B0F8;
-  position: relative;
   background-color: #fff;
   width: 42%;
-  height:auto;
-  min-height: 100%;
+  height:100%;
   margin-left: 5%;
   float: left;
   font-size: 14px;
+  padding: 15px 0 15px 15px;position: relative;
 }
 
 #expression {
@@ -63,12 +61,18 @@ h1 {
 }
 
 #input_panel {
-  height: 10%
-  position: relative;
-  bottom: 10px;
-  clear: both;
+  display: block;
+  height:50px;
   width: 100%;
+  padding-top: 20px;
   text-align: center;
+  overflow: hidden;
+}
+
+#contents {
+width: 100%;
+height: 100%;
+overflow: hidden;
 }
 </style>
 </head>
@@ -76,15 +80,17 @@ h1 {
 <header>
   <h1>JSONPath expression tester</h1>
 </header>
+
+<div id="mainpanel">
+  <div id="contents">
+    <pre id="editor"></pre>
+    <pre id="result"></pre>
+  </div>
+</div>
 <div id="input_panel">
   <input id="expression" type="text" value="$.store.book[*].author"/>
   <button id="send">Filter</button>
 </div>
-<div id="mainpanel">
-  <pre id="editor"></pre>
-  <pre id="result"></pre>
-</div>
-
 <script type="text/javascript" src="lib/ace/ace.js" charset="utf-8"></script>
 <script type="text/javascript" >
 var json = { "store": {
