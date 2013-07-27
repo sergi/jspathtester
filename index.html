@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="author" content="Sergi Mansilla">
 <title>JSONPath expression tester</title>
 <script type="text/javascript" src="node_modules/JSONPath/lib/jsonpath.js"></script>
 <style type="text/css" media="screen">
@@ -9,6 +10,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: Helvetica,"Helvetica neue", Arial, sans-serif;
 }
 
 body {
@@ -130,6 +132,8 @@ h1 {
   <input id="expression" type="text" value="$.store.book[*].author"/>
   <button id="send">Filter</button>
 </div>
+
+<div style="text-align: center; width: 100%">&copy; 2013 <a href="http://sergimansilla.com">Sergi Mansilla</a></div>
 <script type="text/javascript" src="lib/ace/ace.js" charset="utf-8"></script>
 <script type="text/javascript" >
 var json = { "store": {
